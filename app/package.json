@@ -1,0 +1,79 @@
+{
+  "name": "devops-safle-app",
+  "version": "1.0.0",
+  "description": "Node.js application for DevOps assignment",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "docker:build": "docker build -t devops-safle-app .",
+    "docker:run": "docker run -p 3000:3000 devops-safle-app",
+    "metrics": "curl http://localhost:3000/metrics",
+    "health": "curl http://localhost:3000/health"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.8.1",
+    "prom-client": "^14.2.0",
+    "winston": "^3.10.0",
+    "winston-cloudwatch": "^6.2.0",
+    "pg": "^8.11.1",
+    "pg-pool": "^3.6.1",
+    "dotenv": "^16.3.1",
+    "joi": "^17.9.2",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.1",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "supertest": "^6.3.3",
+    "nodemon": "^3.0.1",
+    "eslint": "^8.44.0",
+    "eslint-config-node": "^4.1.0",
+    "@types/jest": "^29.5.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/config/**",
+      "!src/migrations/**"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "devops",
+    "monitoring",
+    "prometheus",
+    "aws"
+  ],
+  "author": "Mohammad Gouse",
+  "license": "MIT"
+}

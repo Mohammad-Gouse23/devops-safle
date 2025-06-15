@@ -1,3 +1,6 @@
+# terraform/modules/asg/main.tf
+
+# Get latest Amazon Linux 2 AMI
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -119,11 +122,13 @@ resource "aws_iam_role_policy" "ecr_policy" {
 # User Data Script
 locals {
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+    project_name       = var.project_name
+    environment        = var.environment
     ecr_repository_url = var.ecr_repository_url
-    db_endpoint       = var.db_endpoint
-    db_name          = var.db_name
-    db_username      = var.db_username
-    aws_region       = data.aws_region.current.name
+    db_endpoint        = var.db_endpoint
+    db_name           = var.db_name
+    db_username       = var.db_username
+    aws_region        = data.aws_region.current.name
   }))
 }
 
@@ -192,4 +197,3 @@ resource "aws_autoscaling_group" "main" {
     propagate_at_launch = true
   }
 }
-

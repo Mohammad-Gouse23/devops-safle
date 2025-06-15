@@ -8,8 +8,12 @@ WORKDIR /usr/src/app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Install dependencies - handle missing package-lock.json
+RUN if [ -f package-lock.json ]; then \
+        npm ci --omit=dev && npm cache clean --force; \
+    else \
+        npm install --only=production && npm cache clean --force; \
+    fi
 
 # Production stage
 FROM node:18-alpine AS production

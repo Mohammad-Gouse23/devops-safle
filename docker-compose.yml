@@ -4,7 +4,7 @@ services:
   # Main Safle Node.js Application
   safle-app:
     build:
-      context: .
+      context: ./app
       dockerfile: Dockerfile
       target: production
     container_name: safle-app

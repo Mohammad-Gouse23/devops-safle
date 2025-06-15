@@ -70,6 +70,9 @@ This repository implements a complete DevOps pipeline for a Node.js application,
 ```bash
 git clone https://github.com/Mohammad-Gouse23/devops-safle.git
 cd devops-safle
+cd scripts
+./docker.sh
+cd ..
 
 # Start local environment
 docker-compose up -d

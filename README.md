@@ -75,7 +75,7 @@ cd scripts
 cd ..
 
 # Start local environment
-docker-compose up -d
+sudo docker-compose up -d
 
 # Run tests
 cd app && npm test

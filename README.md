@@ -72,7 +72,6 @@ git clone https://github.com/Mohammad-Gouse23/devops-safle.git
 cd devops-safle
 cd scripts
 ./docker.sh
-./terraform.sh
 cd ..
 
 # Start local environment
@@ -84,6 +83,9 @@ cd app && npm test
 
 ### Infrastructure Deployment
 ```bash
+cd scripts
+./terraform.sh 
+cd ..
 cd terraform
 terraform init
 terraform plan -var-file="terraform.tfvars"

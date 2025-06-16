@@ -174,7 +174,7 @@ module "rds" {
   environment       = var.environment
   vpc_id            = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnet_ids
-  security_group_id = aws_security_group.rds.id
+  security_group_ids = [aws_security_group.rds.id]
   db_instance_class = var.db_instance_class
   db_name           = var.db_name
   db_username       = var.db_username

@@ -1,5 +1,3 @@
-# terraform/modules/asg/main.tf
-
 # Get latest Amazon Linux 2 AMI
 data "aws_ami" "amazon_linux" {
   most_recent = true
@@ -8,53 +6,6 @@ data "aws_ami" "amazon_linux" {
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
-}
-
-# Security Group for ASG instances
-resource "aws_security_group" "asg" {
-  name_prefix = "${var.project_name}-${var.environment}-asg-"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description     = "HTTP from ALB"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [data.aws_security_group.alb.id]
-  }
-
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${var.project_name}-${var.environment}-asg-sg"
-    Project     = var.project_name
-    Environment = var.environment
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# Data source to get ALB security group
-data "aws_security_group" "alb" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.project_name}-${var.environment}-alb-sg"]
   }
 }
 
@@ -140,7 +91,7 @@ resource "aws_launch_template" "main" {
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
 
-  vpc_security_group_ids = [aws_security_group.asg.id]
+  vpc_security_group_ids = [var.security_group_id]  # ✅ Use variable instead of local security group
 
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_profile.name

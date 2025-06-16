@@ -66,3 +66,8 @@ variable "db_username" {
   description = "Database username"
   type        = string
 }
+
+variable "security_group_id" {
+  description = "Security group ID for the ASG instances"
+  type        = string
+}

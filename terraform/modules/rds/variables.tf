@@ -13,6 +13,12 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "security_group_ids" {
+  description = "List of security group IDs to attach to RDS instance"
+  type        = list(string)
+}
+
+
 variable "private_subnet_ids" {
   description = "IDs of the private subnets"
   type        = list(string)

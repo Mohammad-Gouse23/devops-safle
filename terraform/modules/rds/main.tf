@@ -10,45 +10,6 @@ resource "aws_db_subnet_group" "main" {
   }
 }
 
-# Security Group for RDS
-resource "aws_security_group" "rds" {
-  name_prefix = "${var.project_name}-${var.environment}-rds-"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description     = "MySQL/Aurora"
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    security_groups = [data.aws_security_group.asg.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${var.project_name}-${var.environment}-rds-sg"
-    Project     = var.project_name
-    Environment = var.environment
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# Data source to get ASG security group
-data "aws_security_group" "asg" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.project_name}-${var.environment}-asg-sg"]
-  }
-}
-
 # Random password for RDS
 resource "random_password" "db_password" {
   length  = 32
@@ -88,7 +49,7 @@ resource "aws_db_instance" "main" {
   username = var.db_username
   password = random_password.db_password.result
 
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  vpc_security_group_ids = var.security_group_ids
   db_subnet_group_name   = aws_db_subnet_group.main.name
 
   backup_retention_period = var.environment == "prod" ? 7 : 1
@@ -104,4 +65,3 @@ resource "aws_db_instance" "main" {
     Environment = var.environment
   }
 }
-

@@ -1,40 +1,29 @@
-output "db_instance_endpoint" {
-  description = "RDS instance endpoint"
-  value       = aws_db_instance.main.endpoint
-}
-
-output "db_instance_id" {
-  description = "RDS instance ID"
+output "rds_instance_id" {
+  description = "The ID of the RDS instance"
   value       = aws_db_instance.main.id
 }
 
-output "db_instance_arn" {
-  description = "RDS instance ARN"
+output "rds_instance_arn" {
+  description = "The ARN of the RDS instance"
   value       = aws_db_instance.main.arn
 }
 
-output "db_name" {
-  description = "Database name"
-  value       = aws_db_instance.main.db_name
+output "rds_instance_endpoint" {
+  description = "The endpoint of the RDS instance"
+  value       = aws_db_instance.main.endpoint
 }
 
-output "db_username" {
-  description = "Database username"
-  value       = aws_db_instance.main.username
+output "rds_instance_address" {
+  description = "The address of the RDS instance"
+  value       = aws_db_instance.main.address
 }
 
-output "db_port" {
-  description = "Database port"
-  value       = aws_db_instance.main.port
-}
-
-output "db_subnet_group_name" {
-  description = "Database subnet group name"
-  value       = aws_db_subnet_group.main.name
-}
-
-output "secret_arn" {
-  description = "ARN of the secret containing the database password"
+output "rds_secret_arn" {
+  description = "The ARN of the secret storing the DB password"
   value       = aws_secretsmanager_secret.db_password.arn
 }
 
+output "rds_db_subnet_group" {
+  description = "The name of the RDS DB subnet group"
+  value       = aws_db_subnet_group.main.name
+}

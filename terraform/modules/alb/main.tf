@@ -1,47 +1,9 @@
-resource "aws_security_group" "alb" {
-  name_prefix = "${var.project_name}-${var.environment}-alb-"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "HTTP"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "HTTPS"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${var.project_name}-${var.environment}-alb-sg"
-    Project     = var.project_name
-    Environment = var.environment
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 # Application Load Balancer
 resource "aws_lb" "main" {
   name               = "${var.project_name}-${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb.id]
+  security_groups    = [var.security_group_id]  # Use the security group passed from root module
   subnets            = var.public_subnet_ids
 
   enable_deletion_protection = false
@@ -94,7 +56,7 @@ resource "aws_lb_listener" "main" {
 # Optional: HTTPS listener if domain is provided
 resource "aws_lb_listener" "https" {
   count = var.domain_name != "" ? 1 : 0
-
+  
   load_balancer_arn = aws_lb.main.arn
   port              = "443"
   protocol          = "HTTPS"
@@ -110,7 +72,7 @@ resource "aws_lb_listener" "https" {
 # Optional: SSL Certificate lookup
 data "aws_acm_certificate" "cert" {
   count = var.domain_name != "" ? 1 : 0
-
+  
   domain   = var.domain_name
   statuses = ["ISSUED"]
 }

@@ -24,3 +24,8 @@ variable "domain_name" {
   default     = ""
 }
 
+variable "security_group_id" {
+  description = "Security group ID for the ALB"
+  type        = string
+}
+

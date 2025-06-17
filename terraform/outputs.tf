@@ -32,9 +32,9 @@ output "private_subnet_ids" {
 output "security_group_ids" {
   description = "Security group IDs"
   value = {
-    alb = module.alb.security_group_id
-    asg = module.asg.security_group_id
-    rds = module.rds.security_group_id
+    alb = aws_security_group.alb.id
+    asg = aws_security_group.asg.id
+    rds = aws_security_group.rds.id
   }
 }
 

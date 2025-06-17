@@ -17,3 +17,8 @@ output "launch_template_latest_version" {
   description = "Latest version of the launch template"
   value       = aws_launch_template.main.latest_version
 }
+
+output "asg_name" {
+  description = "Name of the Auto Scaling Group"
+  value       = aws_autoscaling_group.main.name
+}

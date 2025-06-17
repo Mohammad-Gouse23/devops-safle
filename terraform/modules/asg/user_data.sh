@@ -17,12 +17,15 @@ sudo ./aws/install
 # Login to ECR
 aws ecr get-login-password --region ${aws_region} | docker login --username AWS --password-stdin ${ecr_repository_url}
 
+# Get database password from Secrets Manager
+DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project_name}-${environment}-db-password --query SecretString --output text --region ${aws_region})
+
 # Create environment file for the application
 cat > /home/ec2-user/.env << EOF
 DB_HOST=${db_endpoint}
 DB_NAME=${db_name}
 DB_USER=${db_username}
-DB_PASSWORD=\$(aws secretsmanager get-secret-value --secret-id ${project_name}-${environment}-db-password --query SecretString --output text --region ${aws_region})
+DB_PASSWORD=$DB_PASSWORD
 EOF
 
 # Pull and run the application container
